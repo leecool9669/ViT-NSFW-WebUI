@@ -1,29 +1,22 @@
 # -*- coding: utf-8 -*-
 """NSFW 图像检测 WebUI 演示（不加载真实模型，仅界面展示）。"""
 from __future__ import annotations
-
 import gradio as gr
 
-
 def fake_load_model():
-    """模拟加载模型，实际不下载权重，仅用于界面演示。"""
     return "模型状态：nsfw_image_detection（ViT 图像分类）已就绪（演示模式，未加载真实权重）"
 
-
 def fake_detect(image) -> tuple[str, str]:
-    """模拟对输入图像进行 NSFW 分类并返回可视化结果。"""
     if image is None:
         return "", "请先上传或选择一张图片再进行检测。"
     out_text = (
         "【演示模式】当前未加载真实模型，以下为界面展示示例。\n\n"
-        "加载真实 Falconsai/nsfw_image_detection 模型后，将在此显示：\n"
+        "加载真实模型后，将在此显示：\n"
         "· 预测类别：normal / nsfw\n"
         "· 各类别置信度或概率\n"
         "· 可视化结果（如柱状图或标签）"
     )
-    label = "normal（演示）"
-    return label, out_text
-
+    return "normal（演示）", out_text
 
 def build_ui():
     with gr.Blocks(title="NSFW Image Detection · WebUI") as demo:
@@ -44,13 +37,11 @@ def build_ui():
                 detail_out = gr.Textbox(label="结果说明", lines=8, interactive=False)
                 run_btn = gr.Button("开始检测（演示）")
                 run_btn.click(fn=fake_detect, inputs=img_inp, outputs=[label_out, detail_out])
-        gr.Markdown("---\n*说明：当前为轻量级演示界面，未实际下载与加载 nsfw_image_detection 模型参数。*")
+        gr.Markdown("---\n*说明：当前为轻量级演示界面，未实际下载与加载模型参数。*")
     return demo
 
-
 def main():
-    demo = build_ui()
-    demo.launch(server_name="127.0.0.1", server_port=7860, share=False)
+    build_ui().launch(server_name="127.0.0.1", server_port=7860, share=False)
 
 if __name__ == "__main__":
     main()
